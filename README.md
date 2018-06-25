@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Didstopia/steam-update-checker.svg?branch=master)](https://travis-ci.org/Didstopia/steam-update-checker)
+
 # Steam Update Checker
 
 A universal Steam update check utility, written in Go.

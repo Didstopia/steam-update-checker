@@ -20,7 +20,7 @@ func AppInfo(appID string) string {
 }
 
 func run(args []string) string {
-	log.Println("Running steamcmd with args:", args)
+	//log.Println("Running steamcmd with args:", args)
 
 	// Check if steamcmd already exists
 	binary, lookErr := exec.LookPath(steamcmdBinaryPath)

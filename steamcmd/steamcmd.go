@@ -16,10 +16,12 @@ import (
 
 // AppInfo returns a JSON string containing information about the Steam app
 func AppInfo(appID string) string {
-	return run([]string{"+login", "anonymous", "+app_info_update", "1", "+app_info_print", appID, "+quit"})
+	return run([]string{"+@sSteamCmdForcePlatformType", steamcmdPlatform, "+login", "anonymous", "+app_info_update", "1", "+app_info_print", appID, "+quit"})
 }
 
 func run(args []string) string {
+	log.Println("Running steamcmd with args:", args)
+
 	// Check if steamcmd already exists
 	binary, lookErr := exec.LookPath(steamcmdBinaryPath)
 	if lookErr != nil {

@@ -6,3 +6,4 @@ const steamcmdDownloadURL = "https://steamcdn-a.akamaihd.net/client/installer/st
 const steamcmdDownloadPath = "/tmp/steamcmd.tar.gz"
 const steamcmdPath = "/tmp/steamcmd"
 const steamcmdBinaryPath = "/tmp/steamcmd/steamcmd.sh"
+const steamcmdPlatform = "macos"

@@ -71,10 +71,15 @@ func run(args []string) string {
 }
 
 func appInfoFormat(appInfo string) string {
+	// Validate that we have a valid app info string
+	splitAppInfo := strings.Split(appInfo, "\"\n{\n\t")
+	if len(splitAppInfo) <= 1 {
+		log.Fatal("Parsing failed, invalid app info:", appInfo)
+		os.Exit(1)
+	}
 
-	// TODO: This can panic, so we need to be able to catch it!
 	// Get the app info part of the incoming data
-	result := "{\n\t" + strings.Split(appInfo, "\"\n{\n\t")[1]
+	result := "{\n\t" + splitAppInfo[1]
 
 	// Remove tabs
 	result = strings.Replace(result, "\t", "", -1)

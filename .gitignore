@@ -8,6 +8,13 @@ coverage.txt
 *.so
 *.dylib
 
+# Binaries for Go
+debug
+release
+debug/
+release/
+steamer
+
 # Test binary, build with `go test -c`
 *.test
 

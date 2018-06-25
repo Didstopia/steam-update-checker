@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/Didstopia/steam-update-checker.svg?branch=master)](https://travis-ci.org/Didstopia/steam-update-checker)
+[![Build Status](https://travis-ci.org/Didstopia/steam-update-checker.svg?branch=master)](https://travis-ci.org/Didstopia/steamer)
 
-# Steam Update Checker
+# steamer
 
-A universal Steam update check utility, written in Go.
+A steamcmd wrapper, made primarily for easy update checking.
 
 **NOTICE:** _Work in progress._
 

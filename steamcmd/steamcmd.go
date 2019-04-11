@@ -31,7 +31,8 @@ func run(args []string) string {
 		download(steamcmdDownloadPath, steamcmdDownloadURL)
 
 		// Unzip the downloaded file
-		err := archiver.TarGz.Open(steamcmdDownloadPath, steamcmdPath)
+		// err := archiver.TarGz.Open(steamcmdDownloadPath, steamcmdPath)
+		err := archiver.Unarchive(steamcmdDownloadPath, steamcmdPath)
 		if err != nil {
 			log.Fatal("Extraction failed:", err)
 			os.Exit(1)

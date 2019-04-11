@@ -1,8 +1,0 @@
-{
-  "files.autoSave": "afterDelay",
-  "go.gocodeAutoBuild": true,
-  "go.useLanguageServer": true,
-  "[go]": {
-    "editor.formatOnSave": true
-  }
-}

@@ -14,12 +14,16 @@ import (
 	"github.com/mholt/archiver"
 )
 
+// TODO: Add some sort of retry logic for steamcmd, with backoff support, so it'll keep trying to a while
+
 // AppInfo returns a JSON string containing information about the Steam app
 func AppInfo(appID string) string {
-	return run([]string{"+login", "anonymous", "+app_info_update", "1", "+app_info_print", appID, "+quit"})
+	return run([]string{"+@sSteamCmdForcePlatformType", steamcmdPlatform, "+login", "anonymous", "+app_info_update", "1", "+app_info_print", appID, "+quit"})
 }
 
 func run(args []string) string {
+	//log.Println("Running steamcmd with args:", args)
+
 	// Check if steamcmd already exists
 	binary, lookErr := exec.LookPath(steamcmdBinaryPath)
 	if lookErr != nil {
@@ -27,7 +31,8 @@ func run(args []string) string {
 		download(steamcmdDownloadPath, steamcmdDownloadURL)
 
 		// Unzip the downloaded file
-		err := archiver.TarGz.Open(steamcmdDownloadPath, steamcmdPath)
+		// err := archiver.TarGz.Open(steamcmdDownloadPath, steamcmdPath)
+		err := archiver.Unarchive(steamcmdDownloadPath, steamcmdPath)
 		if err != nil {
 			log.Fatal("Extraction failed:", err)
 			os.Exit(1)
@@ -41,7 +46,9 @@ func run(args []string) string {
 		}
 	}
 
-	// TODO: Remove the "appinfo.vdf" cache file before running the command!
+	// FIXME: This will probably only work on macOS and Linux, but not on Windows
+	// Remove the "appinfo.vdf" cache file before running any commands
+	os.Remove("~/Steam/appcache/appinfo.vdf")
 
 	//	Format the command
 	cmd := exec.Command(binary, args...)
@@ -71,15 +78,20 @@ func run(args []string) string {
 }
 
 func appInfoFormat(appInfo string) string {
-	// Validate that we have a valid app info string
-	splitAppInfo := strings.Split(appInfo, "\"\n{\n\t")
-	if len(splitAppInfo) <= 1 {
-		log.Fatal("Parsing failed, invalid app info:", appInfo)
-		os.Exit(1)
+	// Remove everything before the first opening curly
+	firstIndex := strings.LastIndex(reverse(appInfo), "{")
+	if firstIndex > 0 {
+		appInfo = reverse(trimLength(reverse(appInfo), firstIndex+1))
+	}
+
+	// Remove everything after the last closing curly brace
+	lastIndex := strings.LastIndex(appInfo, "}")
+	if lastIndex > 0 {
+		appInfo = trimLength(appInfo, lastIndex+1)
 	}
 
 	// Get the app info part of the incoming data
-	result := "{\n\t" + splitAppInfo[1]
+	result := appInfo
 
 	// Remove tabs
 	result = strings.Replace(result, "\t", "", -1)
@@ -149,11 +161,25 @@ func download(filepath string, url string) error {
 func isJSONString(s string) bool {
 	var js string
 	return json.Unmarshal([]byte(s), &js) == nil
-
 }
 
 func isJSON(s string) bool {
 	var js map[string]interface{}
 	return json.Unmarshal([]byte(s), &js) == nil
+}
 
+func trimLength(s string, i int) string {
+	runes := []rune(s)
+	if len(runes) > i {
+		return string(runes[:i])
+	}
+	return s
+}
+
+func reverse(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
 }

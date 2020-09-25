@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/hokaccha/go-prettyjson"
-	"github.com/mholt/archiver"
+	"github.com/mholt/archiver/v3"
 )
 
 // TODO: Add some sort of retry logic for steamcmd, with backoff support, so it'll keep trying to a while
